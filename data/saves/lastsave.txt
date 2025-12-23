@@ -1,0 +1,9 @@
+2
+2
+483
+16
+4
+149	234	macaco
+310	306	macaco
+174	399	macaco
+213	318	canhao
