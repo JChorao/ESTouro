@@ -784,6 +784,6 @@ public class EstouroJogo extends JFrame implements BloonObserver {
 		// Para testar um nível em particular, comentar a linha anterior e usar
 		// estouro.play("data/niveis/nivel_4_2.txt", 10000, 200);
 		// ou para usar um dos níveis de testar balões (ou torres)
-		// estouro.play("data/niveis_teste/teste_rosa.txt", 10000, 200);
+		//estouro.play("data/niveis_teste/teste_metal.txt", 10000, 200);
 	}
 }

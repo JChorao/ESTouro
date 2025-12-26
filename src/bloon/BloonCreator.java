@@ -143,7 +143,7 @@ public class BloonCreator {
 		BloonMultiCamada metal = new BloonMultiCamada(imagem, imagemPop, 3, 5, 7);
 		metal.addBloon(criarRosa());
 		metal.addBloon(criarRosa());
-		return metal;
+		return new BloonImunePerfurante(metal);
 	}
 
 	public Bloon criarBarro() {
@@ -153,7 +153,7 @@ public class BloonCreator {
 		BloonMultiCamada barro = new BloonMultiCamada(imagem, imagemPop, 3.5f, 4, 7);
 		barro.addBloon(criarPreto());
 		barro.addBloon(criarPreto());
-		return barro;
+		return new BloonImunePerfurante(barro);
 	}
 
 	public Bloon criarPreto() {
@@ -163,17 +163,17 @@ public class BloonCreator {
 		BloonMultiCamada black = new BloonMultiCamada(imagem, imagemPop, 4, 6, 7);
 		black.addBloon(criarRosa());
 		black.addBloon(criarRosa());
-		return black;
+		return new BloonImuneExplosivos(black);
 	}
 
 	public Bloon criarBranco() {
 		ComponenteVisual imagem = getImagem("branco");
 		ComponenteVisual imagemPop = getImagemPop();
 		// TODO branco tem de ser imune a explosões
-		BloonMultiCamada black = new BloonMultiCamada(imagem, imagemPop, 4, 6, 7);
-		black.addBloon(criarMetal());
-		black.addBloon(criarMetal());
-		return black;
+		BloonMultiCamada white = new BloonMultiCamada(imagem, imagemPop, 4, 6, 7);
+		white.addBloon(criarMetal());
+		white.addBloon(criarMetal());
+		return new BloonImuneExplosivos(white);
 	}
 
 	public Bloon criarZeppelinAzul() {
