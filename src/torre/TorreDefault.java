@@ -11,7 +11,7 @@ import java.util.Objects;
 import mundo.Mundo;
 import prof.jogos2D.image.ComponenteMultiAnimado;
 import prof.jogos2D.util.DetectorColisoes;
-import torre.estrategia.*; // <---------------- Alterado por gemini (Importar as estratégias)
+import torre.estrategia.*;
 
 /**
  * Classe que implementa os comportamentos e variáveis comuns a todos as torres.

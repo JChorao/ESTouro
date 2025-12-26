@@ -12,7 +12,7 @@ import prof.jogos2D.image.ComponenteVisual;
 /**
  * Interface que define quais os métodos que todos os bloons devem implementar
  */
-public interface Bloon {
+public interface Bloon{
 
 	/**
 	 * desenha o bloon
@@ -166,4 +166,5 @@ public interface Bloon {
 	 * @param bo o observador a remover
 	 */
 	public void removeBloonObserver(BloonObserver bo);
+
 }
