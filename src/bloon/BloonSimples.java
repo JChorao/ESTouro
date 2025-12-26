@@ -221,4 +221,20 @@ public class BloonSimples implements Bloon {
 		for (int i = obs.size() - 1; i >= 0; i--)
 			obs.get(i).bloonEscapou(this);
 	}
+	@Override
+    public Bloon clone() {
+        try {
+            // Cria uma cópia rasa (copia vida, velocidade, imagens)
+            BloonSimples copia = (BloonSimples) super.clone();
+            
+            // IMPORTANTE: Reiniciar a lista de observadores
+            // O novo balão ainda não está a ser observado pelo jogo
+            copia.obs = new ArrayList<BloonObserver>();
+            
+            return copia;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

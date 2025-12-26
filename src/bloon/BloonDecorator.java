@@ -3,9 +3,9 @@ package bloon;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import prof.jogos2D.image.ComponenteVisual;
 import mundo.Caminho;
 import mundo.Mundo;
+import prof.jogos2D.image.ComponenteVisual;
 
 public abstract class BloonDecorator implements Bloon {
 
@@ -123,5 +123,15 @@ public abstract class BloonDecorator implements Bloon {
     public void explode(int damage) {
         bloonDecorado.explode(damage);
     }
-
+    @Override
+    public Bloon clone() {
+        try {
+            BloonDecorator copia = (BloonDecorator) super.clone();
+            // Clona o balão que está dentro da armadura
+            copia.bloonDecorado = this.bloonDecorado.clone();
+            return copia;
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }

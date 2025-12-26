@@ -2,7 +2,6 @@ package bloon;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import prof.jogos2D.image.ComponenteVisual;
 
 /**
@@ -99,4 +98,20 @@ public class BloonMultiCamada extends BloonSimples {
 			getObservers().forEach(o -> b.addBloonObserver(o));
 		}
 	}
+	
+	@Override
+    public Bloon clone() {
+        // 1. Faz a cópia básica usando a lógica do pai (BloonSimples)
+        BloonMultiCamada copia = (BloonMultiCamada) super.clone();
+        
+        // 2. Cria uma NOVA lista para os filhos do clone
+        copia.bloons = new ArrayList<>();
+        
+        // 3. Clona cada um dos filhos e guarda na nova lista
+        for (Bloon b : this.bloons) {
+            copia.bloons.add(b.clone());
+        }
+        
+        return copia;
+    }
 }
