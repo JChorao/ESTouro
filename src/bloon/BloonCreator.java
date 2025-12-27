@@ -139,7 +139,7 @@ public class BloonCreator {
 	public Bloon criarMetal() {
 		ComponenteVisual imagem = getImagem("metal");
 		ComponenteVisual imagemPop = getImagemPop();
-		// TODO metal tem de ser imune a perfurantes
+		// metal tem de ser imune a perfurantes
 		BloonMultiCamada metal = new BloonMultiCamada(imagem, imagemPop, 3, 5, 7);
 		metal.addBloon(criarRosa());
 		metal.addBloon(criarRosa());
@@ -149,7 +149,7 @@ public class BloonCreator {
 	public Bloon criarBarro() {
 		ComponenteVisual imagem = getImagem("barro");
 		ComponenteVisual imagemPop = getImagemPop();
-		// TODO barro tem de ser imune a perfurantes
+		// barro tem de ser imune a perfurantes
 		BloonMultiCamada barro = new BloonMultiCamada(imagem, imagemPop, 3.5f, 4, 7);
 		barro.addBloon(criarPreto());
 		barro.addBloon(criarPreto());
@@ -159,7 +159,7 @@ public class BloonCreator {
 	public Bloon criarPreto() {
 		ComponenteVisual imagem = getImagem("preto");
 		ComponenteVisual imagemPop = getImagemPop();
-		// TODO preto tem de ser imune a explosões
+		// preto tem de ser imune a explosões
 		BloonMultiCamada black = new BloonMultiCamada(imagem, imagemPop, 4, 6, 7);
 		black.addBloon(criarRosa());
 		black.addBloon(criarRosa());
@@ -169,7 +169,7 @@ public class BloonCreator {
 	public Bloon criarBranco() {
 		ComponenteVisual imagem = getImagem("branco");
 		ComponenteVisual imagemPop = getImagemPop();
-		// TODO branco tem de ser imune a explosões
+		// branco tem de ser imune a explosões
 		BloonMultiCamada white = new BloonMultiCamada(imagem, imagemPop, 4, 6, 7);
 		white.addBloon(criarMetal());
 		white.addBloon(criarMetal());
@@ -224,16 +224,22 @@ public class BloonCreator {
 		ComponenteVisual imagemPop = getImagemPopZep();
 		ComponenteVisual armaduraImg = getImagemArmadura();
 
-		// TODO o Zeppelin metal tem de ser imune a perfurantes
+		// o Zeppelin metal tem de ser imune a perfurantes
 		BloonFabricante metalZep = new BloonFabricante(imagem, imagemPop, 2.3f, 30, 45, 30);
+		BloonImunePerfurante imune = new BloonImunePerfurante(metalZep);
+		
 
-		// TODO o verde e o amarelo têm de ter uma armadura que rebenta ao fim de 8
+		// o verde e o amarelo têm de ter uma armadura que rebenta ao fim de 8
 		// contactos
 		Bloon verde = criarVerde();
+		verde = new BloonArmadura(verde, armaduraImg, 8);
 		metalZep.addBloonProvavel(verde);
+
 		Bloon amarelo = criarAmarelo();
+		amarelo = new BloonArmadura(amarelo, armaduraImg, 8);
 		metalZep.addBloonProvavel(amarelo);
-		return metalZep;
+		
+		return imune;
 	}
 
 	public Bloon criarZeppelinPreto() {
@@ -241,14 +247,17 @@ public class BloonCreator {
 		ComponenteVisual imagemPop = getImagemPopZep();
 		ComponenteVisual escudoImg = getImagemEscudo();
 
-		// TODO o Zeppelin preto tem de ser imune a explosões
+		// o Zeppelin preto tem de ser imune a explosões
 		BloonFabricante pretoZep = new BloonFabricante(imagem, imagemPop, 2.7f, 30, 45, 30);
 
-		// TODO o amarelo e o rosa devem ter um escudo que parte ao fim de 12 contactos
+		// o amarelo e o rosa devem ter um escudo que parte ao fim de 12 contactos
 		Bloon amarelo = criarAmarelo();
+		amarelo = new BloonEscudo(amarelo, escudoImg, 12);
 		pretoZep.addBloonProvavel(amarelo);
+
 		Bloon rosa = criarRosa();
+		rosa = new BloonEscudo(rosa, escudoImg, 12);
 		pretoZep.addBloonProvavel(rosa);
-		return pretoZep;
+		return new BloonImuneExplosivos(pretoZep);
 	}
 }
