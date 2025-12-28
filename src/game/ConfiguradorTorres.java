@@ -1,16 +1,14 @@
 package game;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
-import javax.swing.JToggleButton;
-
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.util.LinkedHashMap;
-import torre.Torre;
-
+import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
+import torre.Torre;
 
 /**
  * Classe que define o painel de escolha do modo de ataque
@@ -32,14 +30,14 @@ public class ConfiguradorTorres extends JPanel {
 	 * Cria os vários botões para os vários modos de ataque
 	 */
 	private void criarBotoesAtaques(JPanel painelAtaques) {
-		// TODO acrescentar os novos modos de ataque
+		//Modos Longe e Forte acrescentados aos modos de ataque
 		painelAtaques.add(criarBotaoAtaque("Primeiro", Torre.ATACA_PRIMEIRO));
 		painelAtaques.add(criarBotaoAtaque("Último", Torre.ATACA_ULTIMO));
 
 		painelAtaques.add(criarBotaoAtaque("Perto", Torre.ATACA_PERTO));
-		painelAtaques.add(criarBotaoAtaque("Longe", -1));
+		painelAtaques.add(criarBotaoAtaque("Longe", Torre.ATACA_LONGE));
 
-		painelAtaques.add(criarBotaoAtaque("Forte", -1));
+		painelAtaques.add(criarBotaoAtaque("Forte", Torre.ATACA_FORTE));
 		painelAtaques.add(criarBotaoAtaque("Juntos", Torre.ATACA_JUNTOS));
 	}
 

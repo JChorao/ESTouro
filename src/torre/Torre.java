@@ -1,10 +1,9 @@
 package torre;
 
+import bloon.Bloon;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.List;
-
-import bloon.Bloon;
 import mundo.Mundo;
 import prof.jogos2D.image.ComponenteMultiAnimado;
 import torre.projetil.Projetil;
@@ -22,6 +21,8 @@ public interface Torre extends Cloneable {
 	public static final int ATACA_ULTIMO = ATACA_PRIMEIRO + 1;
 	public static final int ATACA_PERTO = ATACA_ULTIMO + 1;
 	public static final int ATACA_JUNTOS = ATACA_PERTO + 1;
+	public static final int ATACA_LONGE = ATACA_JUNTOS + 1;
+	public static final int ATACA_FORTE = ATACA_LONGE + 1;
 
 	/**
 	 * Define a posição no écran da torre
