@@ -16,7 +16,7 @@ public class ManipuladorCreator {
 	 * @return o manipulador adequado à torre
 	 */
 	public static ManipuladorTorre criarManipulador(Torre t) {
-		// TODO remover estes instanceof
+		//TODO remover estes instanceof
 		if (t instanceof TorreMacaco)
 			return new ManipuladorVazio(t);
 		else if (t instanceof TorreOctogonal)

@@ -39,3 +39,9 @@ Ninja
 500
 Alterna entre atirar 3 shurikans ou 1 granada.
 </torre>
+<torre>
+sniper
+Sniper
+750
+Possiu alcance infinito.
+</torre>
