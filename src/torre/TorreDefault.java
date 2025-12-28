@@ -60,7 +60,10 @@ public abstract class TorreDefault implements Torre {
 			case ATACA_ULTIMO:   this.estrategia = new AtaqueUltimo(); break;
 			case ATACA_PERTO:    this.estrategia = new AtaquePerto(); break;
 			case ATACA_JUNTOS:   this.estrategia = new AtaqueJuntos(); break;
+			case ATACA_LONGE:    this.estrategia = new AtaqueLonge(); break;
+			case ATACA_FORTE:    this.estrategia = new AtaqueForte(); break;
 			default:             this.estrategia = new AtaquePrimeiro(); break;
+
 		}
 	}
 
