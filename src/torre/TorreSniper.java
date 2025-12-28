@@ -1,21 +1,78 @@
 package torre;
 
 import bloon.Bloon;
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import prof.jogos2D.image.ComponenteAnimado;
 import prof.jogos2D.image.ComponenteMultiAnimado;
 import prof.jogos2D.image.ComponenteVisual;
-import prof.jogos2D.util.DetectorColisoes;
+import prof.jogos2D.util.ImageLoader;
 import torre.projetil.Dardo;
 import torre.projetil.Projetil;
 
 public class TorreSniper extends TorreDefault {
 
+    private Point mira;
+    // Constante para definir o "infinito" visual e lógico
+    private static final int DISTANCIA_INFINITA = 3000; 
+
     public TorreSniper(BufferedImage img) {
+        // O raio de ação lógico é MAX_VALUE, mas visualmente e para cálculos usamos DISTANCIA_INFINITA
         super(new ComponenteMultiAnimado(new Point(), img, 2, 4, 2),
-                20, 6, new Point(0, 0), Integer.MAX_VALUE);
+                20, 0, new Point(20, -3), Integer.MAX_VALUE);
+        setAnguloDisparo(0);
+    }
+
+    public void setAnguloDisparo(float angulo) {
+        getComponente().setAngulo(angulo);
+        definirMira(angulo);
+    }
+
+    private void definirMira(double angulo) {
+        double cos = Math.cos(angulo);
+        double sin = Math.sin(angulo);
+        Point centro = getComponente().getPosicaoCentro();
+        // A mira deve ser muito longe para cobrir o mapa todo (Alcance Infinito)
+        mira = new Point((int) (centro.x + DISTANCIA_INFINITA * cos), (int) (centro.y + DISTANCIA_INFINITA * sin));
+    }
+
+    public Point getMira() {
+        return mira;
+    }
+
+    @Override
+    public void setPosicao(Point p) {
+        super.setPosicao(p);
+        definirMira(getComponente().getAngulo());
+    }
+
+    @Override
+    public void desenhaRaioAcao(Graphics2D g) {
+        Point centro = getComponente().getPosicaoCentro();
+        Point miraInfinita = getMira(); // Agora getMira() já devolve o ponto longe
+
+        Composite oldComp = g.getComposite();
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+
+        // Desenhar a linha Grossa até ao infinito (Visual pedido)
+        g.setColor(Color.BLUE);
+        Line2D.Float l = new Line2D.Float(centro, miraInfinita);
+
+        g.setStroke(new BasicStroke(20)); // Traço muito grosso
+        g.draw(l);
+
+        g.setColor(Color.WHITE);
+        g.setStroke(new BasicStroke(18)); // Interior branco
+        g.draw(l);
+
+        g.setComposite(oldComp);
     }
 
     @Override
@@ -24,63 +81,60 @@ public class TorreSniper extends TorreDefault {
 
         ComponenteMultiAnimado anim = getComponente();
 
-        // Lógica de animação: volta para PAUSA após completar um ciclo de ATAQUE
+        // Animação: volta para PAUSA após completar ciclo
         if (anim.getAnim() == ATAQUE_ANIM && anim.numCiclosFeitos() >= 1) {
             anim.setAnim(PAUSA_ANIM);
         }
 
-        // A Torre Sniper tem alcance infinito para detetar alvos 
-        // Por isso, passamos a lista completa de bloons para a estratégia
-        if (bloons.isEmpty()) {
+        // 1. Obter bloons na Linha de Visão Infinita
+        // Usamos getMira() que agora representa um ponto muito distante
+        List<Bloon> alvosPossiveis = getBloonsInLine(bloons, getComponente().getPosicaoCentro(), getMira());
+        
+        if (alvosPossiveis.isEmpty()) {
             return new Projetil[0];
         }
 
-        // Escolhe o alvo usando a estratégia configurada (Pattern Strategy) [cite: 126, 159]
-        // Como o alcance é infinito, não filtramos por raio aqui
-        Bloon alvo = getEstrategia().escolherAlvo(bloons, anim.getPosicaoCentro());
+        // 2. Escolher o alvo baseado na ESTRATÉGIA (Primeiro, Forte, Último, etc.)
+        // O enunciado diz: "Faz uso de todos os modos de ataque"
+        Bloon alvo = getEstrategia().escolherAlvo(alvosPossiveis, anim.getPosicaoCentro());
 
         if (alvo == null) {
             return new Projetil[0];
         }
 
-        Point posAlvo = alvo.getComponente().getPosicaoCentro();
-
-        // Roda a torre na direção do alvo selecionado [cite: 158]
-        double angle = DetectorColisoes.getAngulo(posAlvo, anim.getPosicaoCentro());
-        anim.setAngulo(angle);
-
-        // Sincroniza a animação de disparo
+        // Sincronizar animação
         sincronizarFrameDisparo(anim);
 
-        // Verifica se o tempo de recarga (ritmo de disparo) permitiu novo tiro
         if (!podeDisparar()) {
             return new Projetil[0];
         }
 
+        // Disparar
         resetTempoDisparar();
 
-        // Cálculo do ponto de saída do projétil baseado na rotação da torre
-        Point disparo = getPontoDisparo();
-        double cosA = Math.cos(angle);
-        double senA = Math.sin(angle);
-        int px = (int) (disparo.x * cosA - disparo.y * senA);
-        int py = (int) (disparo.y * cosA + disparo.x * senA); 
-        Point shoot = new Point(anim.getPosicaoCentro().x + px, anim.getPosicaoCentro().y + py);
-
-        // Criação do Projétil Sniper
-        // O enunciado diz que atinge o inimigo IMEDIATAMENTE com estrago 5 [cite: 154, 155]
-        // Para efeito imediato, o projétil é criado já na posição do alvo
+        // 3. Criar o Projétil "Instântaneo"
         Projetil p[] = new Projetil[1];
-        
-        // Carrega a imagem do dardo (ajustar caminho se necessário)
         ComponenteVisual img = new ComponenteAnimado(new Point(),
-                (BufferedImage) prof.jogos2D.util.ImageLoader.getLoader().getImage("data/torres/dardo.gif"), 2, 2);
+                (BufferedImage) ImageLoader.getLoader().getImage("data/torres/dardo.gif"), 2, 2);
+
+        // "Atinge o inimigo imediatamente" e "Assume que o dardo é atirado diretamente de dentro do bloon"
+        // Definimos a velocidade (ex: 20) para ele se comportar como dardo normal APÓS nascer no alvo
+        double angulo = anim.getAngulo();
         
-        // Dardo Sniper: Estrago 5, atinge imediatamente (velocidade alta ou spawn no alvo) [cite: 155, 157]
-        p[0] = new Dardo(img, angle, 50, 5); // Velocidade 50 para parecer imediato, dano 5
-        p[0].setPosicao(posAlvo); // Spawn direto no alvo para efeito imediato 
-        p[0].setAlcance(1000); // Alcance alto para garantir o impacto
+        // Dano = 5 (conforme enunciado)
+        p[0] = new Dardo(img, angulo, 20, 5); 
         
+        // A posição inicial do dardo é o CENTRO DO INIMIGO (Impacto Imediato)
+        p[0].setPosicao(alvo.getComponente().getPosicaoCentro());
+        p[0].setAlcance(DISTANCIA_INFINITA); 
+
         return p;
+    }
+
+    @Override
+    public Torre clone() {
+        TorreSniper copia = (TorreSniper) super.clone();
+        copia.mira = new Point(mira);
+        return copia;
     }
 }

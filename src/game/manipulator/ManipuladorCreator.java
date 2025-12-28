@@ -29,6 +29,8 @@ public class ManipuladorCreator {
 			return new ManipuladorBalista(t);
 		else if (t instanceof TorreNinja)
 			return new ManipuladorVazio(t);
+		else if (t instanceof TorreSniper)
+			return new ManipuladorSniper(t);
 		return null;
 	}
 
