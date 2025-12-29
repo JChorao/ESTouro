@@ -172,4 +172,9 @@ public abstract class TorreDefault implements Torre {
 			return null;
 		}
 	}
+
+	@Override
+    public void aceitar(TorreVisitor v) {
+        v.visita(this);
+    }
 }

@@ -15,23 +15,9 @@ public class ManipuladorCreator {
 	 * @param t a torre para a qual se pretende um manipulador
 	 * @return o manipulador adequado à torre
 	 */
-	public static ManipuladorTorre criarManipulador(Torre t) {
-		//TODO remover estes instanceof
-		if (t instanceof TorreMacaco)
-			return new ManipuladorVazio(t);
-		else if (t instanceof TorreOctogonal)
-			return new ManipuladorOcto(t);
-		else if (t instanceof TorreCanhao)
-			return new ManipuladorVazio(t);
-		else if (t instanceof TorreMorteiro)
-			return new ManipuladorMorteiro((TorreMorteiro) t);
-		else if (t instanceof TorreBalista)
-			return new ManipuladorBalista(t);
-		else if (t instanceof TorreNinja)
-			return new ManipuladorVazio(t);
-		else if (t instanceof TorreSniper)
-			return new ManipuladorSniper(t);
-		return null;
-	}
-
+	public ManipuladorTorre criarManipulador(Torre t) {
+        ManipuladorTorreVisitor visitor = new ManipuladorTorreVisitor();
+        t.aceitar(visitor); // A visita acontece aqui e preenche a variável 'resultado'
+        return visitor.getResultado();
+    }
 }

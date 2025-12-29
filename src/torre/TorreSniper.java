@@ -137,4 +137,9 @@ public class TorreSniper extends TorreDefault {
         copia.mira = new Point(mira);
         return copia;
     }
+
+   @Override
+    public void aceitar(TorreVisitor v) {
+        v.visita(this);
+    }
 }

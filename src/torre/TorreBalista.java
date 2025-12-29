@@ -1,5 +1,6 @@
 package torre;
 
+import bloon.Bloon;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -9,8 +10,6 @@ import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
-
-import bloon.Bloon;
 import prof.jogos2D.image.*;
 import prof.jogos2D.util.ImageLoader;
 import torre.projetil.Dardo;
@@ -146,4 +145,9 @@ public class TorreBalista extends TorreDefault {
 		copia.mira = new Point(mira);
 		return copia;
 	}
+
+	@Override
+    public void aceitar(TorreVisitor v) {
+        v.visita(this);
+    }
 }

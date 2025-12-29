@@ -119,4 +119,6 @@ public interface Torre extends Cloneable {
 	 * @return uma torre igual à original
 	 */
 	public Torre clone();
+
+	public void aceitar(TorreVisitor v);
 }
