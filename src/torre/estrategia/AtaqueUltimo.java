@@ -12,9 +12,7 @@ public class AtaqueUltimo implements EstrategiaAtaque {
         if (bloons == null || bloons.isEmpty()) {
             return null;
         }
-
-        // Lógica do Switch: bloons.stream().min(...)
-        // Encontra o Bloon com o menor valor de "posicaoNoCaminho"
+        
         return bloons.stream()
                 .min(Comparator.comparingInt(Bloon::getPosicaoNoCaminho))
                 .orElse(null);

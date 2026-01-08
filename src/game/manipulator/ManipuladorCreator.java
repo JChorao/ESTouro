@@ -17,7 +17,7 @@ public class ManipuladorCreator {
 	 */
 	public ManipuladorTorre criarManipulador(Torre t) {
         ManipuladorTorreVisitor visitor = new ManipuladorTorreVisitor();
-        t.aceitar(visitor); // A visita acontece aqui e preenche a variável 'resultado'
+        t.aceita(visitor); // A visita acontece aqui e preenche a variável 'resultado'
         return visitor.getResultado();
     }
 }

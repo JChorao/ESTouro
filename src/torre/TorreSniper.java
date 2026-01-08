@@ -21,12 +21,11 @@ public class TorreSniper extends TorreDefault {
 
     private Point mira;
     // Constante para definir o "infinito" visual e lógico
-    private static final int DISTANCIA_INFINITA = 3000; 
+    private static final int DISTANCIA_INFINITA = 1000; 
 
     public TorreSniper(BufferedImage img) {
-        // O raio de ação lógico é MAX_VALUE, mas visualmente e para cálculos usamos DISTANCIA_INFINITA
         super(new ComponenteMultiAnimado(new Point(), img, 2, 4, 2),
-                20, 0, new Point(20, -3), Integer.MAX_VALUE);
+                20, 0, new Point(20, 0), Integer.MAX_VALUE);
         setAnguloDisparo(0);
     }
 
@@ -39,7 +38,6 @@ public class TorreSniper extends TorreDefault {
         double cos = Math.cos(angulo);
         double sin = Math.sin(angulo);
         Point centro = getComponente().getPosicaoCentro();
-        // A mira deve ser muito longe para cobrir o mapa todo (Alcance Infinito)
         mira = new Point((int) (centro.x + DISTANCIA_INFINITA * cos), (int) (centro.y + DISTANCIA_INFINITA * sin));
     }
 
@@ -56,22 +54,16 @@ public class TorreSniper extends TorreDefault {
     @Override
     public void desenhaRaioAcao(Graphics2D g) {
         Point centro = getComponente().getPosicaoCentro();
-        Point miraInfinita = getMira(); // Agora getMira() já devolve o ponto longe
-
+        Point miraInfinita = getMira();
         Composite oldComp = g.getComposite();
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-
-        // Desenhar a linha Grossa até ao infinito (Visual pedido)
         g.setColor(Color.BLUE);
         Line2D.Float l = new Line2D.Float(centro, miraInfinita);
-
-        g.setStroke(new BasicStroke(20)); // Traço muito grosso
+        g.setStroke(new BasicStroke(20));
         g.draw(l);
-
         g.setColor(Color.WHITE);
-        g.setStroke(new BasicStroke(18)); // Interior branco
+        g.setStroke(new BasicStroke(18));
         g.draw(l);
-
         g.setComposite(oldComp);
     }
 
@@ -79,52 +71,50 @@ public class TorreSniper extends TorreDefault {
     public Projetil[] atacar(List<Bloon> bloons) {
         atualizarCicloDisparo();
 
+        // vamos buscar o desenho pois vai ser preciso várias vezes
         ComponenteMultiAnimado anim = getComponente();
 
-        // Animação: volta para PAUSA após completar ciclo
+        // já acabou a animação de disparar? volta à animação de pausa
         if (anim.getAnim() == ATAQUE_ANIM && anim.numCiclosFeitos() >= 1) {
             anim.setAnim(PAUSA_ANIM);
         }
 
-        // 1. Obter bloons na Linha de Visão Infinita
-        // Usamos getMira() que agora representa um ponto muito distante
+        // determinar a posição do bloon alvo, consoante o método de ataque
         List<Bloon> alvosPossiveis = getBloonsInLine(bloons, getComponente().getPosicaoCentro(), getMira());
         
         if (alvosPossiveis.isEmpty()) {
             return new Projetil[0];
         }
 
-        // 2. Escolher o alvo baseado na ESTRATÉGIA (Primeiro, Forte, Último, etc.)
-        // O enunciado diz: "Faz uso de todos os modos de ataque"
         Bloon alvo = getEstrategia().escolherAlvo(alvosPossiveis, anim.getPosicaoCentro());
 
         if (alvo == null) {
             return new Projetil[0];
         }
 
-        // Sincronizar animação
+        // se vai disparar daqui a pouco, começamos já com a animação de ataque
+		// para sincronizar a frame de disparo com o disparo real
         sincronizarFrameDisparo(anim);
 
         if (!podeDisparar()) {
             return new Projetil[0];
         }
 
-        // Disparar
+        // disparar
         resetTempoDisparar();
 
-        // 3. Criar o Projétil "Instântaneo"
+        // Criar o Projétil "Instântaneo"
         Projetil p[] = new Projetil[1];
         ComponenteVisual img = new ComponenteAnimado(new Point(),
                 (BufferedImage) ImageLoader.getLoader().getImage("data/torres/dardo.gif"), 2, 2);
 
-        // "Atinge o inimigo imediatamente" e "Assume que o dardo é atirado diretamente de dentro do bloon"
-        // Definimos a velocidade (ex: 20) para ele se comportar como dardo normal APÓS nascer no alvo
+        
         double angulo = anim.getAngulo();
         
-        // Dano = 5 (conforme enunciado)
-        p[0] = new Dardo(img, angulo, 20, 5); 
         
-        // A posição inicial do dardo é o CENTRO DO INIMIGO (Impacto Imediato)
+        p[0] = new Dardo(img, angulo, 10, 5); 
+        
+        // Posicao inicial centro do alvo
         p[0].setPosicao(alvo.getComponente().getPosicaoCentro());
         p[0].setAlcance(DISTANCIA_INFINITA); 
 
@@ -139,7 +129,7 @@ public class TorreSniper extends TorreDefault {
     }
 
    @Override
-    public void aceitar(TorreVisitor v) {
+    public void aceita(TorreVisitor v) {
         v.visita(this);
     }
 }

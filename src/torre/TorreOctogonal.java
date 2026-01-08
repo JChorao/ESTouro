@@ -10,9 +10,9 @@ import torre.projetil.Dardo;
 import torre.projetil.Projetil;
 
 /**
- * Classe que representa a torre octogonal. Esta torre dispara 8 dardos.
- * ATENÇÃO: Segundo o enunciado, esta torre "Não faz uso dos modos de ataque",
- * por isso removemos a lógica de escolha de alvo.
+ * Classe que representa a torre octogonal. Esta torre dispara 8 dardos, um em
+ * cada direção dos seus lançadores. Só dispara quando tem bloons dentro do seu
+ * raio de ação.
  */
 public class TorreOctogonal extends TorreDefault {
 
@@ -26,41 +26,45 @@ public class TorreOctogonal extends TorreDefault {
     @Override
     public Projetil[] atacar(List<Bloon> bloons) {
         atualizarCicloDisparo();
-
+        
+        // vamos buscar o desenho pois vai ser preciso várias vezes
         ComponenteMultiAnimado anim = getComponente();
 
+        // já acabou a animação de disparar? volta à animação de pausa
         if (anim.getAnim() == ATAQUE_ANIM && anim.numCiclosFeitos() >= 1) {
             anim.setAnim(PAUSA_ANIM);
         }
 
-        // 1. Verificar se há inimigos no raio
+        // ver quais os bloons que estão ao alcance
         List<Bloon> alvosPossiveis = getBloonsInRadius(bloons, getComponente().getPosicaoCentro(), getRaioAcao());
-        
-        /*  Se não houver ninguém, não dispara.
-         <---------------- Alterado por gemini: O switch foi removido.
-         Como a torre dispara em todas as direções, não precisa de escolher UM alvo específico.
-         Basta saber se existe ALGUÉM para atacar. */
-		 
         if (alvosPossiveis.isEmpty())
             return new Projetil[0];
 
+        // ver o ângulo que o alvo faz com a torre, para assim rodar esta
+		double angle = (double) 0; // neste caso o ângulo não interessa pois são 8
+
+        // se vai disparar daqui a pouco, começamos já com a animação de ataque
+		// para sincronizar a frame de disparo com o disparo real
         sincronizarFrameDisparo(anim);
 
+        // se ainda não está na altura de disparar, não dispara
         if (!podeDisparar())
             return new Projetil[0];
 
+        // disparar
         resetTempoDisparar();
 
+        // primeiro calcular o ponto de disparo
         Point centro1 = getComponente().getPosicaoCentro();
         Point disparo = getPontoDisparo();
-        // O ângulo base é fixo ou controlado pelo jogador, não depende do bloon alvo
-        double cosA = Math.cos(baseAngle); 
-        double senA = Math.sin(baseAngle);
+        double cosA = Math.cos(angle); 
+        double senA = Math.sin(angle);
         int px = (int) (disparo.x * cosA - disparo.y * senA);
-        int py = (int) (disparo.y * cosA + disparo.x * senA);
+        int py = (int) (disparo.y * cosA + disparo.x * senA); // repor o tempo de disparo
         Point shoot = new Point(centro1.x + px, centro1.y + py);
 
-        // Disparar os 8 dardos
+        // depois criar os projéteis
+		/// disparar os 8 dardos
         Projetil p[] = new Projetil[8];
         double angulo = baseAngle + Math.PI / 2;
         double incAng = Math.PI / 4;
@@ -76,13 +80,18 @@ public class TorreOctogonal extends TorreDefault {
         return p;
     }
 
+    /**
+	 * Altera o ângulo da octo
+	 * 
+	 * @param angle o novo ângulo
+	 */
     public void setAngle(double angle) {
         getComponente().setAngulo(angle);
         baseAngle = angle;
     }
 
     @Override
-    public void aceitar(TorreVisitor v) {
+    public void aceita(TorreVisitor v) {
         v.visita(this);
     }
 }

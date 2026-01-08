@@ -15,7 +15,6 @@ public class AtaqueForte implements EstrategiaAtaque {
         int maiorValor = 0; 
 
         for (Bloon b : bloons) {
-            // Se encontrarmos um bloon com valor estritamente superior ao máximo atual
             if (b.getValor() > maiorValor) {
                 maiorValor = b.getValor();
                 alvoMaisForte = b;

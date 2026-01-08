@@ -226,16 +226,12 @@ public class BloonSimples implements Bloon {
     public Bloon clone() {
         try {
             BloonSimples copia = (BloonSimples) super.clone();
-
-            // --- CORREÇÃO: Clonar as imagens para serem independentes ---
             if (this.imagem != null) {
                 copia.imagem = this.imagem.clone();
             }
             if (this.imagemPop != null) {
                 copia.imagemPop = this.imagemPop.clone();
             }
-            // ------------------------------------------------------------
-
             copia.obs = new ArrayList<BloonObserver>();
             return copia;
         } catch (CloneNotSupportedException e) {

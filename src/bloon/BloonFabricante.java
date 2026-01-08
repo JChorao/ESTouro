@@ -52,13 +52,11 @@ public class BloonFabricante extends BloonSimples {
         if (proximaCriacao <= 0) {
             // decidir aleatoriamente qual o bloon a "disparar"
             int idx = ThreadLocalRandom.current().nextInt(provaveis.size());
-
             // colocar o bloon um pouco à frente deste
             int pathOffset = 3;
             int pos = getPosicaoNoCaminho();
             if (getCaminho().getPoint(pos + pathOffset) == null)
                 pathOffset = 0;
-
             // esta parte tem de ser revista pois está a usar repetidamente os mesmos
             // bloons
             Bloon escolhido = provaveis.get(idx).clone();
@@ -71,13 +69,8 @@ public class BloonFabricante extends BloonSimples {
     }
     @Override
     public Bloon clone() {
-        // Clona o fabricante base
         BloonFabricante copia = (BloonFabricante) super.clone();
-        
-        // Cria uma nova lista de protótipos
         copia.provaveis = new ArrayList<>();
-        
-        // Clona os protótipos para garantir independência total
         for (Bloon b : this.provaveis) {
             copia.provaveis.add(b.clone());
         }

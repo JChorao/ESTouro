@@ -16,7 +16,6 @@ public class GameWriterVisitor implements TorreVisitor {
         infoParaGravar = ""; 
     }
 
-    // --- Torres Simples ---
     @Override
     public void visita(TorreMacaco t) {
         infoParaGravar = "macaco";
@@ -32,7 +31,6 @@ public class GameWriterVisitor implements TorreVisitor {
         infoParaGravar = "ninja";
     }
 
-    // --- Torres Complexas ---
     @Override
     public void visita(TorreOctogonal t) {
         infoParaGravar = "octo\t" + t.getComponente().getAngulo();

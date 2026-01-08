@@ -32,20 +32,13 @@ public class GameWriter {
 			List<Torre> torres = m.getTorres();
 			out.println(torres.size());
 			
-			//Instanceof removidos com Visitor
+			// Visitor - gravar informacao da torre
 			for (Torre t : torres) {
-			// Instancia o visitor
-			GameWriterVisitor writerVisitor = new GameWriterVisitor();
-
-			// 1. Escreve a posição (comum a todas)
-			Point p = t.getComponente().getPosicaoCentro();
-			out.print(p.x + "\t" + p.y + "\t");
-
-			// 2. Visita a torre para gerar a string correta
-			t.aceitar(writerVisitor);
-			
-			// 3. Obtém o resultado guardado no visitor e escreve
-			out.println(writerVisitor.getInfoParaGravar());
+				GameWriterVisitor writerVisitor = new GameWriterVisitor();
+				Point p = t.getComponente().getPosicaoCentro();
+				out.print(p.x + "\t" + p.y + "\t");
+				t.aceita(writerVisitor);
+				out.println(writerVisitor.getInfoParaGravar());
 			}
 		}
 	}

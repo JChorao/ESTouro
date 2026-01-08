@@ -15,8 +15,6 @@ public abstract class BloonDecorator implements Bloon {
         this.bloonDecorado = bloonDecorado;
     }
 
-    // --- MÉTODOS DELEGADOS (Repassam a chamada para o original) ---
-
     @Override
     public void desenhar(Graphics2D g) {
         bloonDecorado.desenhar(g);
@@ -111,8 +109,6 @@ public abstract class BloonDecorator implements Bloon {
     public void removeBloonObserver(BloonObserver bo) {
         bloonDecorado.removeBloonObserver(bo);
     }
-
-    // --- MÉTODOS QUE VAMOS ALTERAR NOS FILHOS ---
     
     @Override
     public int pop(int estrago) {
@@ -127,7 +123,6 @@ public abstract class BloonDecorator implements Bloon {
     public Bloon clone() {
         try {
             BloonDecorator copia = (BloonDecorator) super.clone();
-            // Clona o balão que está dentro da armadura
             copia.bloonDecorado = this.bloonDecorado.clone();
             return copia;
         } catch (CloneNotSupportedException e) {

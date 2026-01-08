@@ -15,12 +15,18 @@ import torre.projetil.Dardo;
 import torre.projetil.Projetil;
 
 /**
- * Classe que representa a torre ninja.
+ * Classe que representa a torre ninja. Esta torre dispara alternadamente 3
+ * dardos ou 1 granada para os bloons de acordo com o seu modo de ataque.
  */
 public class TorreNinja extends TorreDefault {
 
     private boolean dardos = false;
 
+    /**
+     * Cria uma torre ninja
+     * 
+     * @param img a imagem da torre
+     */
     public TorreNinja(BufferedImage img) {
         super(new ComponenteMultiAnimado(new Point(50, 50), img, 2, 4, 3), 30, 8, new Point(20, 0), 100);
     }
@@ -29,48 +35,56 @@ public class TorreNinja extends TorreDefault {
     public Projetil[] atacar(List<Bloon> bloons) {
         atualizarCicloDisparo();
 
+        // vamos buscar o desenho pois vai ser preciso várias vezes
         ComponenteMultiAnimado anim = getComponente();
 
+        // já acabou a animação de disparar? volta à animação de pausa
         if (anim.getAnim() == ATAQUE_ANIM && anim.numCiclosFeitos() >= 1) {
             anim.setAnim(PAUSA_ANIM);
         }
 
         // determinar a posição do bloon alvo
         Point posAlvo = null;
-        
+        // ver quais os bloons que estão ao alcance
         List<Bloon> alvosPossiveis = getBloonsInRadius(bloons, getComponente().getPosicaoCentro(), getRaioAcao());
         if (alvosPossiveis.size() == 0)
             return new Projetil[0];
             
-        // O Switch gigante foi removido e substituído por esta linha:
-        Bloon alvo = getEstrategia().escolherAlvo(alvosPossiveis, getComponente().getPosicaoCentro()); // <---------------- Alterado por gemini
+        Bloon alvo = getEstrategia().escolherAlvo(alvosPossiveis, getComponente().getPosicaoCentro()); 
 
-        if (alvo == null) // <---------------- Alterado por gemini
+        if (alvo == null) 
             return new Projetil[0];
 
-        posAlvo = alvo.getComponente().getPosicaoCentro(); // <---------------- Alterado por gemini
+        posAlvo = alvo.getComponente().getPosicaoCentro(); 
 
-        // ver o ângulo que o alvo faz com a torre
+        // ver o ângulo que o alvo faz com a torre, para assim rodar esta
         double angle1 = DetectorColisoes.getAngulo(posAlvo, anim.getPosicaoCentro());
         anim.setAngulo(angle1);
-
+        
+        // ajustar o ângulo
         double angle = angle1;
 
+        // se vai disparar daqui a pouco, começamos já com a animação de ataque
+        // para sincronizar a frame de disparo com o disparo real
         sincronizarFrameDisparo(anim);
 
+        // se ainda não está na altura de disparar, não dispara
         if (!podeDisparar())
             return new Projetil[0];
 
+        // disparar
         resetTempoDisparar();
 
+        // primeiro calcular o ponto de disparo
         Point disparo = getPontoDisparo();
         double cosA = Math.cos(angle);
         double senA = Math.sin(angle);
         int px = (int) (disparo.x * cosA - disparo.y * senA);
-        int py = (int) (disparo.y * cosA + disparo.x * senA); 
-        Point shoot = new Point(getComponente().getPosicaoCentro().x + px, getComponente().getPosicaoCentro().y + py);
+        int py = (int) (disparo.y * cosA + disparo.x * senA); // repor o tempo de disparo
+        Point shoot = new Point(getComponente().getPosicaoCentro().x + px, getComponente().getPosicaoCentro().y + py); 
 
-        dardos = !dardos; 
+        // depois criar os projéteis
+        dardos = !dardos; // inverter a vez
         if (dardos) {
             Projetil p[] = new Projetil[3];
             for (int i = 0; i < 3; i++) {
@@ -89,5 +103,10 @@ public class TorreNinja extends TorreDefault {
             p[0].setAlcance(getRaioAcao() + 20);
             return p;
         }
+    }
+
+    @Override
+    public void aceita(TorreVisitor v) {
+        v.visita(this);
     }
 }

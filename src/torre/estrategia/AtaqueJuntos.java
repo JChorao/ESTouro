@@ -15,20 +15,17 @@ public class AtaqueJuntos implements EstrategiaAtaque {
             return null;
         }
 
-        // 1. Agrupar Bloons por "segmentos" de 20 unidades do caminho
         Map<Integer, List<Bloon>> posicoes = bloons.stream()
                 .collect(Collectors.groupingBy(b -> b.getPosicaoNoCaminho() / 20));
 
         if (posicoes.isEmpty()) return null;
 
-        // 2. Encontrar qual segmento (chave) tem a lista maior (mais bloons)
         int posicaoComMais = Collections.max(posicoes.keySet(),
                 (k1, k2) -> posicoes.get(k1).size() - posicoes.get(k2).size());
 
-        // 3. Retornar o primeiro bloon desse grupo
         List<Bloon> grupoAlvo = posicoes.get(posicaoComMais);
         if (grupoAlvo != null && !grupoAlvo.isEmpty()) {
-            return grupoAlvo.get(0); // Equivalente ao .getFirst()
+            return grupoAlvo.get(0);
         }
         
         return null;

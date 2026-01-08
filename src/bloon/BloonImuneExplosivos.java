@@ -8,8 +8,6 @@ public class BloonImuneExplosivos extends BloonDecorator {
 
     @Override
     public void explode(int damage) {
-        // NÃO chama o super.explode().
-        // Ao deixar este método vazio, o dano da explosão é ignorado completamente.
-        System.out.println("Imune a Explosão! O bloon sobreviveu.");
+        // Ignora o dano de explosivos
     }
 }

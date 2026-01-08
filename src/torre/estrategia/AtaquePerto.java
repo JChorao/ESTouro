@@ -16,11 +16,7 @@ public class AtaquePerto implements EstrategiaAtaque {
         double menorDistancia = Double.MAX_VALUE;
 
         for (Bloon b : bloons) {
-            // Obtém o centro do bloon
             Point posBloon = b.getBounds().getLocation(); 
-            // O getBounds().getLocation() dá o canto superior esquerdo, 
-            // idealmente seria o centro, mas para este efeito serve.
-            
             double distancia = posicaoTorre.distance(posBloon);
 
             if (distancia < menorDistancia) {

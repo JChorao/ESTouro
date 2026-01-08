@@ -147,7 +147,7 @@ public class TorreBalista extends TorreDefault {
 	}
 
 	@Override
-    public void aceitar(TorreVisitor v) {
+    public void aceita(TorreVisitor v) {
         v.visita(this);
     }
 }

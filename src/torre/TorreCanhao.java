@@ -39,12 +39,12 @@ public class TorreCanhao extends TorreDefault {
 			return new Projetil[0];
 
 		// O Switch gigante foi removido e substituído por esta linha:
-		Bloon alvo = getEstrategia().escolherAlvo(alvosPossiveis, getComponente().getPosicaoCentro()); // <---------------- Alterado por gemini
+		Bloon alvo = getEstrategia().escolherAlvo(alvosPossiveis, getComponente().getPosicaoCentro()); 
 
-		if (alvo == null) // <---------------- Alterado por gemini
+		if (alvo == null) 
 			return new Projetil[0];
 
-		posAlvo = alvo.getComponente().getPosicaoCentro(); // <---------------- Alterado por gemini
+		posAlvo = alvo.getComponente().getPosicaoCentro(); 
 
 		// ver o ângulo que o alvo faz com a torre
 		double angle1 = DetectorColisoes.getAngulo(posAlvo, anim.getPosicaoCentro());
@@ -53,13 +53,18 @@ public class TorreCanhao extends TorreDefault {
 		// ajustar o ângulo
 		double angle = angle1;
 
+		// se vai disparar daqui a pouco, começamos já com a animação de ataque
+		// para sincronizar a frame de disparo com o disparo real
 		sincronizarFrameDisparo(anim);
 
+		// se ainda não está na altura de disparar, não dispara
 		if (!podeDisparar())
 			return new Projetil[0];
 
+		// disparar
 		resetTempoDisparar();
 
+		// primeiro calcular o ponto de disparo
 		Point disparo = getPontoDisparo();
 		double cosA = Math.cos(angle);
 		double senA = Math.sin(angle);
@@ -67,6 +72,7 @@ public class TorreCanhao extends TorreDefault {
 		int py = (int) (disparo.y * cosA + disparo.x * senA); 
 		Point shoot = new Point(getComponente().getPosicaoCentro().x + px, getComponente().getPosicaoCentro().y + py);
 
+		// depois criar os projéteis
 		Projetil p[] = new Projetil[1];
 		ComponenteVisual img = new ComponenteSimples(ImageLoader.getLoader().getImage("data/torres/bomba.gif"));
 		p[0] = new BombaImpacto(img, angle, 12, 2, getMundo());
@@ -74,4 +80,10 @@ public class TorreCanhao extends TorreDefault {
 		p[0].setAlcance(getRaioAcao() + 20);
 		return p;
 	}
+
+	@Override
+    public void aceita(TorreVisitor v) {
+        v.visita(this);
+    }
+
 }

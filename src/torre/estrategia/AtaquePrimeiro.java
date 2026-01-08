@@ -13,8 +13,6 @@ public class AtaquePrimeiro implements EstrategiaAtaque {
             return null;
         }
         
-        // Lógica do Switch: bloons.stream().max((b1, b2) -> b1.getPosicaoNoCaminho() - b2.getPosicaoNoCaminho())
-        // Encontra o Bloon com o maior valor de "posicaoNoCaminho"
         return bloons.stream()
                 .max(Comparator.comparingInt(Bloon::getPosicaoNoCaminho))
                 .orElse(null);

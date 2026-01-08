@@ -31,16 +31,13 @@ public class BloonEscudo extends BloonDecorator {
     }
 
     @Override
-    public void explode(int estrago) {
+    public void explode(int damage) {
         if (durabilidade > 0) {
             durabilidade--;
-            // Absorve a explosão e retorna (não chama o super)
             return; 
         }
-        super.explode(estrago);
+        super.explode(damage);
     }
-    
-    // O pop() não é reescrito, logo os dardos furam o escudo
 
     @Override
     public Bloon clone() {

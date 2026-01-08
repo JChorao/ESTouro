@@ -35,14 +35,10 @@ public class BloonArmadura extends BloonDecorator {
     public int pop(int estrago) {
         if (durabilidade > 0) {
             durabilidade--; 
-            // Absorve o dano do perfurante e devolve 0
             return 0; 
         }
-        // Se a armadura já partiu, o bloon sofre dano normal
         return super.pop(estrago);
     }
-    
-    // O explode() não é reescrito, logo as bombas passam "através" da armadura
 
     @Override
     public Bloon clone() {

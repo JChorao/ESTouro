@@ -4,6 +4,7 @@ import bloon.Bloon;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.List;
+
 import prof.jogos2D.image.*;
 import prof.jogos2D.util.DetectorColisoes;
 import prof.jogos2D.util.ImageLoader;
@@ -128,7 +129,7 @@ public class TorreMorteiro extends TorreDefault {
 	}
 
 	@Override
-    public void aceitar(TorreVisitor v) {
+    public void aceita(TorreVisitor v) {
         v.visita(this);
     }
 }
