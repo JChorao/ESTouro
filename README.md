@@ -2,7 +2,7 @@
 
 Projeto desenvolvido no âmbito da Unidade Curricular de Padrões de Desenho de Software. O jogo consiste num clássico Tower Defense onde o objetivo é rebentar balões utilizando torres estratégicas.
 
-> **Nota importante:** A estrutura base e o motor gráfico do jogo foram fornecidos pelo docente. O meu contributo focou-se exclusivamente na arquitetura lógica e na **implementação de Padrões de Desenho (Design Patterns)** para tornar o sistema modular e extensível.
+> **Nota importante:** A estrutura base e o motor gráfico do jogo foram fornecidos pelo docente. O meu contributo focou-se exclusivamente na **implementação de Padrões de Desenho (Design Patterns)** para tornar o sistema modular e extensível.
 
 ## 🧠 Padrões de Desenho Implementados
 
